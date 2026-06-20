@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "geothermal:block/t1_heat_extractor"
+    }
+  }
+}

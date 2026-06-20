@@ -1,7 +1,8 @@
 package net.dan7zpc.geothermal.block;
 
 import net.dan7zpc.geothermal.Geothermal;
-import net.dan7zpc.geothermal.block.custom.heat_extractors.TierOneHeatExtractorBlock;
+import net.dan7zpc.geothermal.block.custom.heat_extractors.HeatAccumulatorBlock;
+import net.dan7zpc.geothermal.block.custom.heat_extractors.HeatExtractorBlock;
 import net.dan7zpc.geothermal.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -17,10 +18,15 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(Geothermal.MOD_ID);
 
-    public static final DeferredBlock<Block> TIER_ONE_HEAT_EXTRACTOR = registerBlock("t1_heat_extractor",
-            ()-> new TierOneHeatExtractorBlock(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<Block> HEAT_EXTRACTOR = registerBlock("t1_heat_extractor",
+            ()-> new HeatExtractorBlock(BlockBehaviour.Properties.of()
                     .strength(4)
             ));
+    public static final DeferredBlock<Block> HEAT_ACCUMULATOR = registerBlock("t1_heat_accumulator",
+            ()-> new HeatAccumulatorBlock(BlockBehaviour.Properties.of()
+                    .strength(4)
+            ));
+
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block){
         DeferredBlock<T> toReturn = BLOCKS.register(name,block);
