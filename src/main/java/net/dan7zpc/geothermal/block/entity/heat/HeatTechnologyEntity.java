@@ -1,4 +1,4 @@
-package net.dan7zpc.geothermal.block.entity;
+package net.dan7zpc.geothermal.block.entity.heat;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -107,6 +108,11 @@ public abstract class HeatTechnologyEntity extends BlockEntity implements ITierS
         return this.heat;
     }
 
+    public void addHeat(int amount){
+        this.heat += amount;
+        this.notifyUpdate();
+    }
+
     public void set_tier(Tier newtier){
         this.tier = newtier;
         this.heat_capacity = ITierSwitchable.heat_capacity.get(newtier);
@@ -150,5 +156,12 @@ public abstract class HeatTechnologyEntity extends BlockEntity implements ITierS
         BlockEntity be = this.level.getBlockEntity(pos);
         if(!(be instanceof IHeatTransfer)) return null;
         return (HeatTechnologyEntity) be;
+    }
+
+    public void tick(){
+        if(this.get_temperature() > 750){
+            assert level != null;
+            level.setBlockAndUpdate(getBlockPos(), Blocks.AIR.defaultBlockState());
+        }
     }
 }

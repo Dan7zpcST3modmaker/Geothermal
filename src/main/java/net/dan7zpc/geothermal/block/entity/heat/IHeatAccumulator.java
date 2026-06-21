@@ -1,4 +1,4 @@
-package net.dan7zpc.geothermal.block.entity;
+package net.dan7zpc.geothermal.block.entity.heat;
 
 public interface IHeatAccumulator extends IHeatTransfer{
 }

@@ -20,6 +20,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     protected void generate() {
         dropSelf(ModBlocks.HEAT_EXTRACTOR.get());
         dropSelf(ModBlocks.HEAT_ACCUMULATOR.get());
+        dropSelf(ModBlocks.HEAT_VENT_HORIZONTAL.get());
     }
 
     @Override

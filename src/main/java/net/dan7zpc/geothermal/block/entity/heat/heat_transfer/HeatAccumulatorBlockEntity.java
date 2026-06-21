@@ -1,12 +1,15 @@
-package net.dan7zpc.geothermal.block.entity.heat_storages;
+package net.dan7zpc.geothermal.block.entity.heat.heat_transfer;
 
 import net.dan7zpc.geothermal.block.entity.*;
+import net.dan7zpc.geothermal.block.entity.heat.HeatTechnologyEntity;
+import net.dan7zpc.geothermal.block.entity.heat.IHeatAccumulator;
+import net.dan7zpc.geothermal.block.entity.heat.ITierSwitchable;
+import net.dan7zpc.geothermal.block.entity.heat.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.checkerframework.common.returnsreceiver.qual.This;
 
-public class HeatAccumulatorBlockEntity extends HeatTechnologyEntity implements IHeatAccumulator{
+public class HeatAccumulatorBlockEntity extends HeatTechnologyEntity implements IHeatAccumulator {
     public HeatAccumulatorBlockEntity(BlockPos pos, BlockState blockState) {
         super(ModBlockEntities.HEAT_ACCUMULATOR_BE.get(), pos, blockState);
     }
@@ -22,6 +25,7 @@ public class HeatAccumulatorBlockEntity extends HeatTechnologyEntity implements 
     }
 
     public void tick(Level blockEntitiyLevel, BlockPos blockPos, BlockState blockState) {
+        super.tick();
         this.spreadHeat();
     }
 
@@ -39,6 +43,8 @@ public class HeatAccumulatorBlockEntity extends HeatTechnologyEntity implements 
 
     @Override
     public int get_transfer_speed() {
-        return 1;
+        return 2 * ITierSwitchable.heat_capacity_multiplier.get(this.get_tier());
     }
+
+
 }

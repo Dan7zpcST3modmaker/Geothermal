@@ -1,6 +1,7 @@
 {
   "values": [
     "geothermal:t1_heat_extractor",
-    "geothermal:t1_heat_accumulator"
+    "geothermal:t1_heat_accumulator",
+    "geothermal:t1_heat_vent_horizontal"
   ]
 }

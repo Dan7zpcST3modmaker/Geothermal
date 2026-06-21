@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "geothermal:block/heat_vent_horizontal"
+    },
+    "active=true": {
+      "model": "geothermal:block/heat_vent_horizontal_active"
+    }
+  }
+}

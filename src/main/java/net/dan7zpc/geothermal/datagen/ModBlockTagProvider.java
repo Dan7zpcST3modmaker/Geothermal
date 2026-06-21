@@ -21,10 +21,12 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.HEAT_EXTRACTOR.get())
                 .add(ModBlocks.HEAT_ACCUMULATOR.get())
+                .add(ModBlocks.HEAT_VENT_HORIZONTAL.get())
         ;
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.HEAT_EXTRACTOR.get())
                 .add(ModBlocks.HEAT_ACCUMULATOR.get())
+                .add(ModBlocks.HEAT_VENT_HORIZONTAL.get())
         ;
     }
 }

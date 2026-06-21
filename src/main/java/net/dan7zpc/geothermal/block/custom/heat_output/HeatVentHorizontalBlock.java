@@ -1,18 +1,14 @@
-package net.dan7zpc.geothermal.block.custom.heat_extractors;
+package net.dan7zpc.geothermal.block.custom.heat_output;
 
 import com.mojang.serialization.MapCodec;
+import net.dan7zpc.geothermal.block.custom.AbstractHeatTechBlock;
 import net.dan7zpc.geothermal.block.entity.ModBlockEntities;
-import net.dan7zpc.geothermal.block.entity.Tier;
-import net.dan7zpc.geothermal.block.entity.heat_inputs.HeatExtractorBlockEntity;
-import net.dan7zpc.geothermal.block.entity.heat_storages.HeatAccumulatorBlockEntity;
+import net.dan7zpc.geothermal.block.entity.heat.Tier;
+import net.dan7zpc.geothermal.block.entity.heat.heat_outputs.HeatVentHorizontalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -23,7 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -31,14 +27,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-public class HeatAccumulatorBlock extends BaseEntityBlock {
-    public static final MapCodec<HeatAccumulatorBlock> CODEC = simpleCodec(HeatAccumulatorBlock::new);
+public class HeatVentHorizontalBlock extends AbstractHeatTechBlock {
+    public static final MapCodec<HeatVentHorizontalBlock> CODEC = simpleCodec(HeatVentHorizontalBlock::new);
     public static final VoxelShape VOXEL_SHAPE = Block.box(0,0,0,16,16,16);
     private BlockEntity be;
-    public static final IntegerProperty TIER = IntegerProperty.create("tier",1,2);
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public HeatAccumulatorBlock(Properties properties) {
+    public HeatVentHorizontalBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.defaultBlockState().setValue(TIER,1));
+        this.registerDefaultState(this.defaultBlockState().setValue(ACTIVE,false));
     }
 
     @Override
@@ -59,38 +57,27 @@ public class HeatAccumulatorBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        be = new HeatAccumulatorBlockEntity(pos,state,Tier.tier_one);
+        be = new HeatVentHorizontalBlockEntity(pos,state,Tier.tier_one);
         return be;
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(TIER);
+        builder.add(ACTIVE);
     }
 
     @Override
     protected @NotNull InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        HeatAccumulatorBlockEntity blockEntity = (HeatAccumulatorBlockEntity)level.getBlockEntity(pos);
+        HeatVentHorizontalBlockEntity blockEntity = (HeatVentHorizontalBlockEntity)level.getBlockEntity(pos);
         if(!level.isClientSide){return InteractionResult.PASS;}
         assert blockEntity != null;
         player.sendSystemMessage(Component.literal("heat:"+blockEntity.get_heat()));
         player.sendSystemMessage(Component.literal("heat_capacity:"+blockEntity.get_heat_capacity()));
         player.sendSystemMessage(Component.literal("temperature:"+blockEntity.get_temperature()));
-        return InteractionResult.CONSUME;
+        return InteractionResult.SUCCESS;
     }
 
-    @Override
-    protected @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        HeatAccumulatorBlockEntity hbe = (HeatAccumulatorBlockEntity) level.getBlockEntity(pos);
-        assert hbe != null;
-        if(stack.getItem() == Items.COPPER_BLOCK && hbe.get_tier()==Tier.tier_one){
-            result = ItemInteractionResult.CONSUME;
-            stack.setCount(stack.getCount()-1);
-            hbe.set_tier(Tier.tier_two);
-        }
-        return result;
-    }
 
     @Nullable
     @Override
@@ -98,7 +85,7 @@ public class HeatAccumulatorBlock extends BaseEntityBlock {
         if(level.isClientSide()){
             return null;
         }
-        return createTickerHelper(blockEntityType, ModBlockEntities.HEAT_ACCUMULATOR_BE.get(),
+        return createTickerHelper(blockEntityType, ModBlockEntities.HEAT_VENT_HORIZONTAL_BE.get(),
                 (blockEntitiyLevel,blockPos,blockState,blockEntity) -> blockEntity.tick(blockEntitiyLevel,blockPos,blockState));
     }
 }

@@ -14,7 +14,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.HEAT_ACCUMULATOR);
+        //blockWithItem(ModBlocks.HEAT_ACCUMULATOR);
     }
 
     private void blockWithItem (DeferredBlock<?> deferredBlock){

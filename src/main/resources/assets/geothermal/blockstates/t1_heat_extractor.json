@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "tier=1": {
       "model": "geothermal:block/t1_heat_extractor"
+    },
+    "tier=2": {
+      "model": "geothermal:block/t2_heat_extractor"
     }
   }
 }

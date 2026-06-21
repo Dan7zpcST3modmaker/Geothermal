@@ -1,9 +1,12 @@
-package net.dan7zpc.geothermal.block.entity.heat_inputs;
+package net.dan7zpc.geothermal.block.entity.heat.heat_inputs;
 
 import net.dan7zpc.geothermal.block.entity.*;
+import net.dan7zpc.geothermal.block.entity.heat.HeatTechnologyEntity;
+import net.dan7zpc.geothermal.block.entity.heat.IHeatInput;
+import net.dan7zpc.geothermal.block.entity.heat.ITierSwitchable;
+import net.dan7zpc.geothermal.block.entity.heat.Tier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class HeatExtractorBlockEntity extends HeatTechnologyEntity implements IHeatInput {
@@ -21,13 +24,9 @@ public class HeatExtractorBlockEntity extends HeatTechnologyEntity implements IH
         return this.extraction_rate;
     }
 
-    public void increment_heat() {
-        this.heat += this.extraction_rate;
-        this.notifyUpdate();
-    }
-
     public void tick(Level level, BlockPos blockPos, BlockState blockState) {
-        this.increment_heat();
+        super.tick();
+        this.addHeat(this.get_base_extraction_rate_watt());
         this.spreadHeat();
     }
 
